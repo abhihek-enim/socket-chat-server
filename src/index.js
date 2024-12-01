@@ -32,3 +32,6 @@ mongoose
   .catch((error) => {
     console.log(error.message);
   });
+
+import userRouter from "./routes/user.routes";
+app.use("/api/v1/user", userRouter);
