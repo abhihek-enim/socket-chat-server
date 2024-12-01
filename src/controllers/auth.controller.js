@@ -36,3 +36,20 @@ export const registerUser = async (req, res, next) => {
     return res.status(500).send("Error: Could not register user.");
   }
 };
+export const loginUser = async (req, res, next) => {
+  const { email, password } = req.body;
+  if (!email || !password) {
+    return res
+      .status(400)
+      .json({ message: "Email and Password is required", success: false });
+  }
+  const user = await User.findOne({ email });
+  const isPasswordCorrect = user.isPasswordCorrect(password);
+  if (!isPasswordCorrect) {
+    return res
+      .status(400)
+      .json({ message: "Email/Password incorrect.", success: false });
+  }
+  const token = createToken(email, user._id);
+  return res.status(200).json({ user, token, success: true });
+};
